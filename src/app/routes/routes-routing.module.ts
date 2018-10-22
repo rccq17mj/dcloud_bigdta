@@ -21,17 +21,21 @@ import { Exception500Component } from './exception/500.component';
 // 路由守卫
 import { RoutesGuardService } from './routes-guard.service';
 
+import { MainPages } from '../../../projects/src/app/app.component';
+
 const routes: Routes = [
   {
     path: '',
     component: LayoutDefaultComponent,
     canActivate: [RoutesGuardService],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'app', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent, data: { title: '仪表盘', titleI18n: 'dashboard' }, canActivate: [RoutesGuardService] },
       { path: 'dev', loadChildren: './dev/dev.module#DevModule', canActivateChild: [RoutesGuardService] },
       // 业务子模块
       // { path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule' }
+      { path: 'app', component: MainPages }
     ]
   },
   // 全屏布局

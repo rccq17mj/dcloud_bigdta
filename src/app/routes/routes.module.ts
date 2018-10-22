@@ -4,6 +4,7 @@ import { SharedModule } from '@shared/shared.module';
 import { RouteRoutingModule } from './routes-routing.module';
 // dashboard pages
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { MainPages } from '../../../projects/src/app/app.component';
 // passport pages
 import { UserLoginComponent } from './passport/login/login.component';
 import { UserRegisterComponent } from './passport/register/register.component';
@@ -30,7 +31,8 @@ const COMPONENTS = [
   UserLockComponent,
   Exception403Component,
   Exception404Component,
-  Exception500Component
+  Exception500Component,
+  MainPages
 ];
 const COMPONENTS_NOROUNT = [];
 
