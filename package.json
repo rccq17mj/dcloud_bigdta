@@ -14,7 +14,8 @@
     "lint:style": "stylelint \"{src}/**/*.less\" --syntax less",
     "lint-staged": "lint-staged",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
-    "hmr": "ng serve -c=hmr"
+    "hmr": "ng serve -c=hmr",
+    "kill": "node shell.js"
   },
   "private": true,
   "dependencies": {

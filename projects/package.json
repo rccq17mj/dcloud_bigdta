@@ -5,10 +5,11 @@
     "ng": "ng",
     "start:build": "live-server dist/custom-tag",
     "start": "ng serve -o --port=9102",
+    "kill": "kill -9 $(ps -ef|grep node |awk '$0 !~/grep/ {print $2}' |tr -s '\n' ' ')",
     "build": "ng build --prod --output-hashing none",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
   },
   "private": true,
   "dependencies": {
