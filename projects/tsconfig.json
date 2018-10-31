@@ -17,5 +17,11 @@
       "dom"
     ]
   },
-  "@angular/*": ["../node_modules/@angular/*"]
+  "paths": {
+    "@angular/*": ["../node_modules/@angular/*"],
+    "@angular/animations": ["../node_modules/@angular/animations"],
+    "@angular/core": ["../node_modules/@angular/core"],
+    "@angular/http":  ["../node_modules/@angular/http"],
+    "@angular/router": "../node_modules/@angular/http",
+  }
 }
