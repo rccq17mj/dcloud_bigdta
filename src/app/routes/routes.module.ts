@@ -4,7 +4,7 @@ import { SharedModule } from '@shared/shared.module';
 import { RouteRoutingModule } from './routes-routing.module';
 // dashboard pages
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { MainPages } from '../../../projects/src/app/app.component';
+import { MainPages } from '../../../projects/pj111/src/app/app.component';
 // passport pages
 import { UserLoginComponent } from './passport/login/login.component';
 import { UserRegisterComponent } from './passport/register/register.component';

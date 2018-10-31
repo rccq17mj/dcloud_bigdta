@@ -27,6 +27,13 @@ import { AngKitComponentModule } from '@ang-kit/component';
 import { RequestsModule } from '@requests/requests.module';
 import { NgrxModule } from '@ngrxs/ngrx.module';
 
+
+//import { DelonMockModule } from '@delon/mock';
+import * as MOCKDATA from '../../_mock';
+import { environment } from '../environments/environment';
+//const MOCKMODULE = !environment.production ? [ DelonMockModule.forRoot({ data: MOCKDATA }) ] : [];  
+
+
 export function StartupServiceFactory(startupService: StartupService): Function {
   return () => startupService.load();
 }
@@ -54,7 +61,8 @@ export function StartupServiceFactory(startupService: StartupService): Function 
     // RequestsModule
     RequestsModule,
     // ngrx
-    NgrxModule
+    NgrxModule,
+    //MOCKMODULE
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'zh-Hans' },

@@ -10,20 +10,20 @@
   },
   "menu": [
     {
-      "text": "主导航",
+      "text": "管理导航",
       "group": true,
       "hideInBreadcrumb": true,
       "children": [
         {
-          "text": "示例",
+          "text": "可视化管理",
           "icon": "anticon antanticon anticon-dashboard",
           "children": [
             {
-              "text": "http",
-              "link": "/dev/example/http"
+              "text": "项目管理",
+              "link": "/#/dashboard"
             },
             {
-              "text": "ngrx",
+              "text": "组件库管理",
               "link": "/dev/example/ngrx"
             }
           ]
@@ -32,3 +32,4 @@
     }
   ]
 }
+

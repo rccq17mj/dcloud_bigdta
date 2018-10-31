@@ -1,3 +1,61 @@
 <div class="content__title">
-  <h1>Page Name</h1>
+  <h1>项目列表</h1>
 </div>
+
+  <div style="margin:0px;padding:0px;clear:both;">
+    <div nz-row [nzGutter]="8">
+      
+        <div nz-col [nzSpan]="8" >
+          <p>
+          <button nz-button [nzType]="'primary'" (click)="showModal()" ><span>新建项目</span></button>
+          </p>
+        </div>
+      
+    </div>
+  </div>
+
+  <p *ngIf="loadvisible">
+      <nz-spin nzTip='Loading...'>
+          <nz-alert
+            nzType="info"
+            nzMessage="正在创建项目.."
+            nzDescription="screen print..请稍侯..">
+          </nz-alert>
+      </nz-spin>
+  </p>
+  
+
+
+
+  <div style="background: #ECECEC;padding:30px;">
+    <div nz-row [nzGutter]="8">
+
+      <div nz-col [nzSpan]="8"  *ngFor="let item of datas">
+
+        <nz-card nzTitle="项目：{{item.name}} ">
+          <p>{{item.id}} {{item.discript}} </p>
+          <p>
+            <button nz-button nzType="default" [nzSize]="size"><i nz-icon type="download"></i>Bundle Download</button>
+            <a nz-button nzType="default" [nzSize]="size" href="/#/prview"><i nz-icon type="download"></i>预览项目</a>
+          </p>
+        </nz-card>
+        
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+
+<!--项目名称填写框-->
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="新建项目" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <p><input nz-input placeholder="项目名称" [(ngModel)]="pj.name" ></p>
+    <p><textarea nz-input placeholder="描述" [nzAutosize]="{ minRows: 6, maxRows: 6 }" [(ngModel)]="pj.discript"></textarea></p>
+  </nz-modal>
+
+
+
+
+    

@@ -18,7 +18,8 @@ const THIRDMODULES = [
 // endregion
 
 // region: your componets & directives
-const COMPONENTS = [];
+import { ImageWrapperComponent } from './components/image-wrapper';
+const COMPONENTS = [ImageWrapperComponent];
 const DIRECTIVES = [];
 // endregion
 

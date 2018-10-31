@@ -66,4 +66,5 @@ export const USERS = {
   '/404': () => {
     throw new MockStatusError(404);
   },
+  'GET /test':() => ['project1','project2','project3']
 };

@@ -1,5 +1,8 @@
 {
-  "/example": {
-    "target": "http://10.10.10.91:8045"
+  "/api": {
+    "target": "http://127.0.0.1:3333",
+    "pathRewrite":{
+      "^/api": ""
+    }
   }
 }

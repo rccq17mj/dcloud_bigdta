@@ -15,6 +15,7 @@ import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd';
   selector: 'app-root',
   template: `<router-outlet></router-outlet>`,
 })
+
 export class AppComponent implements OnInit {
   @HostBinding('class.layout-fixed')
   get isFixed() {

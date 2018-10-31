@@ -21,7 +21,7 @@ import { Exception500Component } from './exception/500.component';
 // 路由守卫
 import { RoutesGuardService } from './routes-guard.service';
 
-import { MainPages } from '../../../projects/src/app/app.component';
+import { MainPages } from '../../../projects/pj111/src/app/app.component';
 
 const routes: Routes = [
   {
@@ -29,13 +29,14 @@ const routes: Routes = [
     component: LayoutDefaultComponent,
     canActivate: [RoutesGuardService],
     children: [
-      // { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: '', redirectTo: 'app', pathMatch: 'full' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent, data: { title: '仪表盘', titleI18n: 'dashboard' }, canActivate: [RoutesGuardService] },
+      { path: '', redirectTo: 'prview', pathMatch: 'full' },
       { path: 'dev', loadChildren: './dev/dev.module#DevModule', canActivateChild: [RoutesGuardService] },
       // 业务子模块
       // { path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule' }
-      { path: 'app', component: MainPages }
+      { path: 'sys', loadChildren: './sys/sys.module#SysModule' },
+      { path: 'prview', component: MainPages }
     ]
   },
   // 全屏布局
