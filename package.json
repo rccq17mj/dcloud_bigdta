@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.config.json",
+    "start:node": "ng serve --proxy-config proxy.config.json -o --port=9100 & cd nodeapp && npm run start:node",
+    "start": "ng serve --proxy-config proxy.config.json -o --port=9100",
     "build": "ng build --prod --build-optimizer",
     "test": "ng test",
     "lint": "npm run lint:ts && npm run lint:style",
@@ -14,7 +15,8 @@
     "lint:style": "stylelint \"{src}/**/*.less\" --syntax less",
     "lint-staged": "lint-staged",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
-    "hmr": "ng serve -c=hmr"
+    "hmr": "ng serve -c=hmr",
+    "kill": "node shell.js"
   },
   "private": true,
   "dependencies": {
