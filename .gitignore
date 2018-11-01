@@ -39,5 +39,4 @@ testem.log
 Thumbs.db
 
 # node
-/*/node_modules
 /projects/*
