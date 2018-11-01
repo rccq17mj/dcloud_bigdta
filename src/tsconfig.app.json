@@ -1,0 +1,70 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "types": [
+      "node"
+    ],
+    "paths": {
+      "@shared": [
+        "app/shared"
+      ],
+      "@shared/*": [
+        "app/shared/*"
+      ],
+      "@core": [
+        "app/core"
+      ],
+      "@core/*": [
+        "app/core/*"
+      ],
+      "@testing": [
+        "testing"
+      ],
+      "@testing/*": [
+        "testing/*"
+      ],
+      "@env": [
+        "environments"
+      ],
+      "@env/*": [
+        "environments/*"
+      ],
+      "@components": [
+        "app/components"
+      ],
+      "@components/*": [
+        "app/components/*"
+      ],
+      "@appConfig": [
+        "app/config"
+      ],
+      "@appConfig/*": [
+        "app/config/*"
+      ],
+      "@models": [
+        "app/models"
+      ],
+      "@models/*": [
+        "app/models/*"
+      ],
+      "@requests": [
+        "app/requests"
+      ],
+      "@requests/*": [
+        "app/requests/*"
+      ],
+      "@ngrxs": [
+        "app/ngrxs"
+      ],
+      "@ngrxs/*": [
+        "app/ngrxs/*"
+      ]
+    },
+    "baseUrl": "./"
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts"
+  ]
+}

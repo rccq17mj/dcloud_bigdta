@@ -74,7 +74,7 @@ export class DashboardComponent implements OnInit {
     getpjs(){
      let url = '/api/showpj'
      this.http.get( url ).subscribe( res => {
-       this.datas = res.sort( this.getSortFun('desc','id') );
+       this.datas = res;//res.sort( this.getSortFun('desc','id') );
 
        this.loadvisible = false; //隐藏
      });
