@@ -14,21 +14,20 @@ class PjbdController {
 		var filesArr 	= [];
 		const fs 		= require('fs');
 
-		const path  = require('path');
-		let pjsfile  = path.join(__dirname,'../../../../projects/');
+		const path      = require('path');
+		let pjsfile     = path.join(__dirname,'../../../../projects/');
 
-		var   readDir 	= fs.readdirSync(pjsfile);
+		var readDir 	= fs.readdirSync(pjsfile);
 
 		readDir.forEach(function(ele,index){
-			var itempath = pjsfile+"/"+ele
-			var readfile = itempath+'/CN.txt'
+			var itempath = pjsfile+""+ele
+			var readfile = itempath+'/.CN'
 			var info = fs.statSync(itempath)	
 			if(info.isDirectory() && ele!='ag6ready'){
 				var checkDir = fs.existsSync(readfile);
 				if(checkDir){
 					var readcntstr = fs.readFileSync(readfile)
 					var readcnt = JSON.parse(readcntstr)
-					//console.log(readcnt)
 					filesArr.push(readcnt);
 				}
 				

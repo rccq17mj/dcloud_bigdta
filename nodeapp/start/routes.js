@@ -19,7 +19,7 @@ const Route = use('Route')
 
 Route.on('/').render('welcome');
 
-Route.resource('posts', 'PostController')
+//Route.resource('posts', 'PostController')
 Route.resource('pjbds', 'PjbdController')
 
 
@@ -37,3 +37,21 @@ Route.get('/pjinit', 'PjmakeController.pjinit'); //创建项目
 
 Route.get('/showfile', 'PjbdController.showfile');//读取指定文件
 Route.get('/runcommand', 'PjbdController.runcommand');
+
+
+
+
+const delay = (data,time) =>{
+    return new Promise((resolve,reject)=>{
+        setTimeout(()=>{
+           resolve(data)
+        }, time)
+    })
+
+}
+
+
+Route.get('/posts', async({reponse}) =>{
+    const data = await delay({'name':'test'}, 10000);
+    return data;
+})

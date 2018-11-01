@@ -39,7 +39,6 @@ export class DashboardComponent implements OnInit {
     //点击确认建立项目
     handleOk(): void {
       console.log('Button ok clicked!');
-      this.loadvisible = true;
       
       this.isVisible = false;//隐藏弹出模型层
       let l = this.datas.length
@@ -61,22 +60,25 @@ export class DashboardComponent implements OnInit {
     }
 
     pjmake(){
-      //console.log(this.pj.name)
+      this.loadvisible = true;
       let url = '/api/pjinit'
-      this.http.get( url,{name: this.pj.name, discript: this.pj.discript}).subscribe( res => {
-        this.datas = res;
-
+      //let url = '/api/posts'
+      //debugger;
+      this.http.get( url, {name: this.pj.name, discript: this.pj.discript}).subscribe( res => {
+        //debugger;
+        console.log(res)
+        this.datas.unshift(res);
+        
         this.pj.name = ''
         this.pj.discript = ''
+        this.loadvisible = false;
       });
     }
 
     getpjs(){
      let url = '/api/showpj'
      this.http.get( url ).subscribe( res => {
-       this.datas = res;//res.sort( this.getSortFun('desc','id') );
-
-       this.loadvisible = false; //隐藏
+       this.datas = res//.sort( this.getSortFun('desc','id') );
      });
     }
 
