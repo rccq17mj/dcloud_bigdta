@@ -65,7 +65,7 @@ class PjmakeController {
 		// const ls = spawn('ls', ['-lh', './']);
 
 		// ls.stdout.on('data', (data) => {
-		// 	console.log(`======stdout: ${data}`);
+		// 	console.log(`======stdout: ${da	ta}`);
 		// });
 
 		ls.stderr.on('data', (data) => {
