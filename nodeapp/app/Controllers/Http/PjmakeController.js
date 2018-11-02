@@ -7,12 +7,13 @@ class PjmakeController {
 		//路径设置
 		const path  = require('path');
 		let pjsfile  = path.join(__dirname,'../../../../projects/');
+
 		var name     = request.input('name');
 		var discript = request.input('discript');
 		//生成项目名
 		let filename = this.get_filename()
 		let filepath = this.filesmake(pjsfile,filename)
-		
+
 		//copy文件夹
 		const data  = await this.sys_copy(pjsfile + 'ag6ready/*', filepath+"/")  //ag6ready
 
@@ -20,7 +21,7 @@ class PjmakeController {
 		let cnfile  = filepath+"/.CN"
 		let savetag = {'id':filename, 'name':name, 'discript':discript};
 		let codestr = JSON.stringify(savetag)
-		this.writesimple(cnfile,codestr)  
+		this.writesimple(cnfile,codestr)
 
 		//安装
 		// this.pjinstall(filepath);
@@ -45,27 +46,28 @@ class PjmakeController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {*} src 被拷文件
 	 * @param {*} dst 拷送到目标地
 	 */
 	sys_copy(src, dst) {
-	  
-	  let timestape = this.get_filename('T')
-	  console.log(`\n======开始执行时间点：${timestape} --\n`);
-	  const spawn = require('child_process').spawn;
-	  
-	  return new Promise((resolve, reject)=>{
-        let ls = spawn('cp', ['-r', src, dst], {
-			stdio: ['pipe', 'pipe', 'pipe']
-		})
+    src = src.replace(" ",'\\ ');
+    dst = dst.replace(" ",'\\ ');
+    const process = require('process');
+    console.log( process.platform === 'win32' ? true : false);
 
+	  let timestape = this.get_filename('T');
+	  console.log(`\n======开始执行时间点：${timestape} --\n`);
+	  const exec = require('child_process').exec;
+
+	  return new Promise((resolve, reject)=>{
+        let ls = exec('cp -r '+ src + ' ' + dst);
 		// const ls = spawn('ls', ['-lh', './']);
-		
+
 		// ls.stdout.on('data', (data) => {
 		// 	console.log(`======stdout: ${data}`);
 		// });
-		  
+
 		ls.stderr.on('data', (data) => {
 			console.log(`======stderr: ${data}`);
 		});
@@ -76,9 +78,6 @@ class PjmakeController {
 			resolve('end')
 		});
      })
-
-
-
 	}
 
 
@@ -112,8 +111,8 @@ class PjmakeController {
 
 		month      = this.checkTime(month)
 		day        = this.checkTime(day)
-		hour       = this.checkTime(hour) 
-		minute     = this.checkTime(minute) 
+		hour       = this.checkTime(hour)
+		minute     = this.checkTime(minute)
 		second     = this.checkTime(second)
 
 		let backstr = '';
@@ -125,14 +124,14 @@ class PjmakeController {
 		return backstr
 	}
 
-	checkTime(i) 
-	{ 
-		if (i<10) 
-		{ 
-		  i="0" + i 
-		} 
-		return i 
-	} 
+	checkTime(i)
+	{
+		if (i<10)
+		{
+		  i="0" + i
+		}
+		return i
+	}
 
 }
 

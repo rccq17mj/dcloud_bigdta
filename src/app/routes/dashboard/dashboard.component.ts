@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
     name: '',
     discript: ''
   };
-  datas:any;
+  datas : any;
   isVisible = false;
   loadvisible = false;
   constructor(
@@ -39,19 +39,17 @@ export class DashboardComponent implements OnInit {
     //点击确认建立项目
     handleOk(): void {
       console.log('Button ok clicked!');
-      
+
       this.isVisible = false;//隐藏弹出模型层
-      let l = this.datas.length
-      l++;
 
       this.pjmake()//创建项目
       this.getpjs()//请求并更新项目列表
 
-      // setTimeout(function() { 
+      // setTimeout(function() {
       //   this.loadvisible = false;
-      //   this.datas.unshift('project'+l) 
+      //   this.datas.unshift('project'+l)
       // }.bind(this), 3000);
-        
+
     }
 
     handleCancel(): void {
@@ -68,7 +66,7 @@ export class DashboardComponent implements OnInit {
         //debugger;
         console.log(res)
         this.datas.unshift(res);
-        
+
         this.pj.name = ''
         this.pj.discript = ''
         this.loadvisible = false;
@@ -89,7 +87,7 @@ export class DashboardComponent implements OnInit {
     }
 
 
-    
+
 
 
    ngOnInit() {
