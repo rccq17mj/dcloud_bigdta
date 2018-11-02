@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start:node": "ng serve --proxy-config proxy.config.json -o --port=9100 & cd nodeapp && npm run start:node",
-    "start": "ng serve --proxy-config proxy.config.json -o --port=9100",
+    "start": "ng serve --proxy-config proxy.config.json -o --port=9100 & cd nodeapp && npm run start:node",
+    "start:node": "ng serve --proxy-config proxy.config.json -o --port=9100",
     "build": "ng build --prod --build-optimizer",
     "test": "ng test",
     "lint": "npm run lint:ts && npm run lint:style",
