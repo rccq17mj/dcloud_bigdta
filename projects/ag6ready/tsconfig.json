@@ -28,5 +28,6 @@
     "@angular/platform-browser": ["../../node_modules/@angular/platform-browser"],
     "@angular/platform-browser-dynamic": ["../../node_modules/@angular/platform-browser-dynamic"],
     "@angular/router": ["../../node_modules/@angular/router"],
+    "@angular-devkit/build-angular":  ["../../node_modules/@angular-devkit/build-angular"],
   }
 }

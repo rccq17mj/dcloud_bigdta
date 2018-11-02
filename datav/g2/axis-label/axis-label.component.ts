@@ -10,42 +10,24 @@ export class AxisLabelComponent implements OnInit {
 
   constructor() { }
 
-  data = [];
+  title = 'app';
+  data = {};
   chart ;
+  graph;
 
   ngOnInit() {
+    this.chartData();
   }
-
   chartData() {
     this.data = [
-      {
-        year: '1951 年',
-        sales: 38
-      }, {
-        year: '1952 年',
-        sales: 52
-      }, {
-        year: '1956 年',
-        sales: 61
-      }, {
-        year: '1957 年',
-        sales: 145
-      }, {
-        year: '1958 年',
-        sales: 48
-      }, {
-        year: '1959 年',
-        sales: 38
-      }, {
-        year: '1960 年',
-        sales: 38
-      }, {
-        year: '1962 年',
-        sales: 38
-      }
+      { genre: 'Sports', sold: 275 },
+      { genre: 'Strategy', sold: 115 },
+      { genre: 'Action', sold: 120 },
+      { genre: 'Shooter', sold: 350 },
+      { genre: 'Other', sold: 150 }
     ];
     this.chart = new G2.Chart({
-      container: 'axis-label', // 指定图表容器 ID
+      container: 'axis_label', // 指定图表容器 ID
       width : 600, // 指定图表宽度
       height : 300 // 指定图表高度
     });
