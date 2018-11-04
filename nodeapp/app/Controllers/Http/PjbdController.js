@@ -36,25 +36,45 @@ class PjbdController {
 		return filesArr;
 	}
 
-	/**
-	** 测试调用系统命令
-	**/
 
-	runcommand(){
-		const execSync = require('child_process').execSync;
-		let cmd = execSync('npm -v');
-		// console.log(cmd)
-		return 'aaaa'
+	/**
+	 * 设置文件预览准备：1.读取文件，2替换关键字
+	 */
+	setshow({ request }) {
+		let cnt = ''
+		let s = false;
+		let pj_id = request.input('pj_id')
+		if(pj_id) {
+			cnt = this.changecnt(pj_id)
+		}
+		return cnt//{'id': pj_id}
 	}
 
+
 	/**
-	** 显示文件内容
+	** 读取更改文件内容
 	**/
-	showfile(){
+	changecnt(pj_id) {
 		const path  = require('path');
-		let pj_path = 'pj111/src/app/app.module.ts';
-		let pjfile  = path.join(__dirname,'../../../../projects/' + pj_path);
-		return this.readsimple(pjfile);
+		let cnt = ''
+		let filepath = ''
+		let chang_file 	= ['pjshow.module.ts', 'pjshow-routing.module.ts'];
+		let upfile_path = '../../../../src/app/routes/pjshow/';
+
+		for(let i=0; i < chang_file.length; i++) {
+			//拼凑文件路径
+			let filepath = path.join(__dirname, upfile_path + chang_file[i]);
+			console.log(filepath)
+		    //文件内容取得
+			cnt = this.readsimple(filepath);
+			//修改替换
+			cnt = cnt.toString().replace(/(ag6ready|\d{14})/, pj_id) //将原路径替换为当前项目
+			//重写回去
+			this.writesimple(filepath, cnt)
+			
+		}
+		
+		return cnt
 	}
 
 	/**
@@ -104,9 +124,11 @@ class PjbdController {
 		return fs.readFileSync(filename)
 	}
 
+	
 	writesimple($filename, codestr) {
 		const fs = require('fs');
-		return fs.writeFileSync($filename, codestr)
+		fs.writeFileSync($filename, codestr)
+		return true;
 	}
 
 	//显示整个文件目录

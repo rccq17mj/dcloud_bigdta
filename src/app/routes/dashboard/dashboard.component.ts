@@ -86,6 +86,10 @@ export class DashboardComponent implements OnInit {
       return sortFun;
     }
 
+    trackByPj(id: number, datas): number {
+        return datas.id
+    }
+
 
 
 

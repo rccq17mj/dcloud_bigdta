@@ -26,18 +26,16 @@
   </p>
 
 
-
-
   <div style="background: #ECECEC;padding:30px;">
     <div nz-row [nzGutter]="8">
 
-      <div nz-col [nzSpan]="8"  *ngFor="let item of datas">
+      <div nz-col [nzSpan]="8"  *ngFor="let item of datas;trackBy: trackByPj">
 
         <nz-card nzTitle="项目：{{item.name}} ">
           <p>{{item.id}} {{item.discript}} </p>
           <p>
             <button nz-button nzType="default" [nzSize]="size"><i nz-icon type="download"></i>Bundle Download</button>
-            <a nz-button nzType="default" [nzSize]="size" href="/#/prview"><i nz-icon type="download"></i>预览项目</a>
+            <a nz-button nzType="default" [nzSize]="size" href="/#/pjshow/prview/{{item.id}}"><i nz-icon type="download"></i>预览项目</a>
           </p>
         </nz-card>
 
