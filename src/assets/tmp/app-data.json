@@ -20,7 +20,7 @@
           "children": [
             {
               "text": "项目管理",
-              "link": "/#/dashboard"
+              "link": "/dashboard"
             },
             {
               "text": "组件库管理",
