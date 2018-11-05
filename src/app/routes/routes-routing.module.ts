@@ -30,14 +30,14 @@ const routes: Routes = [
     canActivate: [RoutesGuardService],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardComponent, data: { title: '仪表盘', titleI18n: 'dashboard' }, canActivate: [RoutesGuardService] },
+      { path: 'dashboard', component: DashboardComponent, data: { title: '项目管理' }, canActivate: [RoutesGuardService] },
       { path: 'dev', loadChildren: './dev/dev.module#DevModule', canActivateChild: [RoutesGuardService] },
       // 业务子模块
       // { path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule' }
       { path: 'sys', loadChildren: './sys/sys.module#SysModule' },
-      { path: 'pjshow', loadChildren: './pjshow/pjshow.module#PjshowModule' },
+      { path: 'pjshow', loadChildren: './pjshow/pjshow.module#PjshowModule' , data:{title: '预览'}},
 
-      
+
     ]
   },
   // 全屏布局
