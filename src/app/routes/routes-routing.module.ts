@@ -20,8 +20,7 @@ import { Exception500Component } from './exception/500.component';
 
 // 路由守卫
 import { RoutesGuardService } from './routes-guard.service';
-
-//import { MainPages } from '../../../projects/pj111/src/app/app.component';
+import {DatavComponent} from "../../datav/datav.component";
 
 const routes: Routes = [
   {
@@ -31,7 +30,7 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', component: DashboardComponent, data: { title: '项目管理' }, canActivate: [RoutesGuardService] },
-      { path: 'dev', loadChildren: './dev/dev.module#DevModule', canActivateChild: [RoutesGuardService] },
+      { path: 'datav', component: DatavComponent},
       // 业务子模块
       // { path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule' }
       { path: 'sys', loadChildren: './sys/sys.module#SysModule' },

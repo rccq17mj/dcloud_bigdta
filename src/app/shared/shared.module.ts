@@ -8,7 +8,7 @@ import { DelonABCModule } from '@delon/abc';
 import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
 
-import { DatavModule } from '../../../datav/datav.module'
+import { DatavModule } from '../../datav/datav.module'
 
 // region: third libs
 import { NgZorroAntdModule } from 'ng-zorro-antd';
@@ -22,7 +22,8 @@ const THIRDMODULES = [
 
 // region: your componets & directives
 import { ImageWrapperComponent } from './components/image-wrapper';
-const COMPONENTS = [ImageWrapperComponent];
+import {DatavComponent} from "../../datav/datav.component";
+const COMPONENTS = [ImageWrapperComponent,DatavComponent];
 const DIRECTIVES = [];
 // endregion
 
