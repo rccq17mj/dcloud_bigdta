@@ -35,6 +35,9 @@ Route.get('/showpj', 'PjbdController.showpj');
 //创建项目
 Route.get('/pjinit', 'PjmakeController.pjinit'); //创建项目
 
+//项目安装
+Route.get('/pjinstall', 'PjmakeController.pjinstall'); //创建项目
+
 //读取操作项目
 Route.get('/showfile', 'PjbdController.showfile');//读取指定文件
 

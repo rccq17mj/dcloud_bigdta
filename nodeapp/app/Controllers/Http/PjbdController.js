@@ -1,11 +1,20 @@
 'use strict'
 
-const fs = require('fs');
+const fs 		 = require('fs');
+const PATH       = require('path');
+const PROCESS    = require('child_process');
 
 class PjbdController {
 	constructor() {
 		this.bdfile_path = '';
 	}
+
+	//返回打包文件路径
+	set_bundle_pyth(pj_id) {
+		let bdfile_path  = '../../../../projects/' + pj_id; //打包文件目录
+		this.bdfile_path = PATH.join(__dirname, bdfile_path);
+	}
+
 	/**
 	** 读取文件列表
 	** 取得.CN文件信息，及文件压缩包是否己存在
@@ -14,7 +23,6 @@ class PjbdController {
 		let filelist = this.readpj()
 		return filelist;
 	}
-
 
 
 	//读取项目目录文件名
@@ -42,7 +50,8 @@ class PjbdController {
 					var readcntstr = fs.readFileSync(readfile)
 					var readcnt = JSON.parse(readcntstr)
 					//检测压缩文件是否己生成过
-					var zipfile = itempath + '/dist/custom-tag/clound_tag.gz'
+					var zipfile = itempath + '/dist/custom-tag/clound_data.gz'
+					
 					if(fs.existsSync(zipfile)) {
 						readcnt['bdflag'] = true
 					}else{
@@ -106,36 +115,31 @@ class PjbdController {
 	bundledownFile({ request, response }){
 		let pj_id = request.input('id')
 		this.set_bundle_pyth(pj_id);
-
 		let fs			= require("fs");
-		let bdfile      = this.bdfile_path + '/dist/custom-tag/clound_tag.gz'
+		let bdfile      = this.bdfile_path + '/dist/custom-tag/clound_data.gz'
 		return response.attachment(bdfile)	
+		
 	}
 
 
 
 
-	//设置打包文件路径
-	set_bundle_pyth(pj_id) {
-		const path       = require('path');
-		let bdfile_path  = '../../../../projects/' + pj_id; //打包文件目录
-		bdfile_path      = path.join(__dirname, bdfile_path);
-		this.bdfile_path = bdfile_path
-	}
 
 	/**
 	 * 压缩文件
 	 */
 	bundlefileToZlib(){
 		let bdfile_path  = this.bdfile_path + '/dist/custom-tag/' //打包文件路径
-		const archiver     = require('archiver')
+		const archiver   = require('archiver')
 		const fs 		 = require('fs');
-
+		
 		//需压缩文件列表
-		let zlib_file = ['index.html','custom-items.js'];
+		let files = ['index.html','main.js','polyfills.js','runtime.js','scripts.js','styles.js', 'vendor.js', '3rdpartylicenses.txt','favicon.ico'];
+		//let files =fs.readdirSync(bdfile_path);
+
 
 		// 创建生成的压缩包路径
-		var output = fs.createWriteStream(bdfile_path + 'clound_tag.gz');
+		var output = fs.createWriteStream(bdfile_path + 'clound_data.gz');
 		var archive = archiver('zip');
 		
 		return new Promise((resolve, reject)=>{
@@ -167,12 +171,13 @@ class PjbdController {
 			archive.pipe(output);
 
 			// 添加流文件
-			zlib_file.map((filename)=>{
+			files.map((filename)=>{
 				let filepath = bdfile_path + filename
 				archive.append(fs.createReadStream(filepath), {
 					name: filename
 				});
 			})
+			// archive.directory(bdfile_path)
 			
 			//执行
 			archive.finalize();
@@ -215,7 +220,7 @@ class PjbdController {
 		console.log(`\n======打包开始执行时间：${timestape} --\n`);
 		const exec = require('child_process').exec;
 		return new Promise((resolve, reject)=>{
-			let ls = exec('cd '+ bdfile_path + ' && npm run build');
+			let ls = exec('cd '+ bdfile_path + ' && npm run frist:build');
 			//const ls = exec('ls ' + bdfile_path);
 
 		    ls.stdout.on('data', (data) => {
@@ -253,7 +258,14 @@ class PjbdController {
 		    //文件内容取得
 			cnt = this.readsimple(filepath);
 			//修改替换
-			cnt = cnt.toString().replace(/(ag6ready|\d{14})/, pj_id) //将原路径替换为当前项目
+			let rpstr = 'projects/' + pj_id
+
+			if(cnt.toString().indexOf("ag6ready") == -1) {
+				cnt = cnt.toString().replace(/(\d{14})/, pj_id)
+			} else {
+				cnt = cnt.toString().replace(/(ag6ready)/, rpstr) 
+			}
+
 			//重写回去
 			this.writesimple(filepath, cnt)
 			
