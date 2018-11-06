@@ -21,17 +21,18 @@ export class DashboardComponent implements OnInit {
   pj: Project = {
     id: 1,
     name: '',
-    discript: ''
+    discript: '',
+    bdflag: false
   };
-  datas : any;
-  isVisible = false;
-  loadvisible = false;
-  constructor(
-    private http: _HttpClient
-  ) {
+  datas : any;  //项目清单
+  isVisible   = false; //弹框可见否
+  loadvisible = false; //载入提示可见否
 
-   }
+  constructor(private http: _HttpClient) {}
 
+    /**
+     * 弹框系列方法
+     */
     showModal(): void {
       this.isVisible = true;
     }
@@ -60,11 +61,8 @@ export class DashboardComponent implements OnInit {
     pjmake(){
       this.loadvisible = true;
       let url = '/api/pjinit'
-      //let url = '/api/posts'
       //debugger;
       this.http.get( url, {name: this.pj.name, discript: this.pj.discript}).subscribe( res => {
-        //debugger;
-        console.log(res)
         this.datas.unshift(res);
 
         this.pj.name = ''
@@ -73,13 +71,16 @@ export class DashboardComponent implements OnInit {
       });
     }
 
+    //取得项目清单信息
     getpjs(){
      let url = '/api/showpj'
      this.http.get( url ).subscribe( res => {
        this.datas = res//.sort( this.getSortFun('desc','id') );
+       //console.log(res)
      });
     }
 
+    //倒序排序项目
     getSortFun(order, sortBy) {
       var ordAlpah = (order == 'asc') ? '>' : '<';
       var sortFun = new Function('a', 'b', 'return a.' + sortBy + ordAlpah + 'b.' + sortBy + '?1:-1');
@@ -90,7 +91,25 @@ export class DashboardComponent implements OnInit {
         return datas.id
     }
 
+    //发送指定文件夹的打包请求
+    bundledown(pj_id) {
+      let url = '/api/bundledown'
+      this.http.get( url, {id: pj_id}).subscribe( res => {
+        console.log("bundle complate!")
+        this.datas.map((ele)=>{
+          
+          if(ele.id == pj_id) {
+            ele.bdflag = true
+          }
+        })
+        console.log(this.datas)
+      });
+    }
 
+    //下载文件
+    downfile(pj_id) {
+      window.location.href = 'http://localhost:3333/bundledownFile?id=' + pj_id
+    }
 
 
 

@@ -51,9 +51,9 @@ class PjmakeController {
 	 * @param {*} dst 拷送到目标地
 	 */
 	sys_copy(src, dst) {
-    src = src.replace(" ",'\\ ');
-    dst = dst.replace(" ",'\\ ');
-    const process = require('process');
+      src = src.replace(" ",'\\ ');
+      dst = dst.replace(" ",'\\ ');
+      const process = require('process');
     console.log( process.platform === 'win32' ? true : false);
 
 	  let timestape = this.get_filename('T');

@@ -1,38 +1,59 @@
 'use strict'
 
+const fs = require('fs');
+
 class PjbdController {
+	constructor() {
+		this.bdfile_path = '';
+	}
 	/**
 	** 读取文件列表
+	** 取得.CN文件信息，及文件压缩包是否己存在
 	**/
 	showpj({ request }){
 		let filelist = this.readpj()
 		return filelist;
 	}
 
-	//读取项目目录文件名
-	readpj(){
-		var filesArr 	= [];
-		const fs 		= require('fs');
 
+
+	//读取项目目录文件名
+	readpj() {
+
+
+		var filesArr 	= [];
+		
 		const path      = require('path');
+
 		let pjsfile     = path.join(__dirname,'../../../../projects/');
 
 		var readDir 	= fs.readdirSync(pjsfile);
 
-		readDir.forEach(function(ele,index){
+
+		readDir.map(function(ele){
 			var itempath = pjsfile+""+ele
 			var readfile = itempath+'/.CN'
 			var info = fs.statSync(itempath)	
 			if(info.isDirectory() && ele!='ag6ready'){
 				var checkDir = fs.existsSync(readfile);
 				if(checkDir){
+
+					//取得.CN文件
 					var readcntstr = fs.readFileSync(readfile)
 					var readcnt = JSON.parse(readcntstr)
+					//检测压缩文件是否己生成过
+					var zipfile = itempath + '/dist/custom-tag/clound_tag.gz'
+					if(fs.existsSync(zipfile)) {
+						readcnt['bdflag'] = true
+					}else{
+						readcnt['bdflag'] = false
+					}
 					filesArr.push(readcnt);
 				}
 				
 			}
 		})
+
 		return filesArr;
 	}
 
@@ -50,9 +71,173 @@ class PjbdController {
 		return cnt//{'id': pj_id}
 	}
 
+	/**
+	 * 
+	 * @param {*} 项目id 即目录
+	 * function 1.打包 2.文件合并cat js>>  3文件压缩
+	 */
+	async bundledown({ request }) {
+		let link = ''
+		let pj_id = request.input('id')
+		if(pj_id) {
+
+			this.set_bundle_pyth(pj_id); //依据项目编号设置打包文件路径
+
+			//文件打包
+			await this.bundlefile()
+
+			//文件合并
+			//await this.bundlefileToOne()
+
+			//文件压缩处理
+			await this.bundlefileToZlib()
+
+			// await this.bundledownFile()
+		}
+
+		return {'status': 'ok'}
+	}
 
 	/**
-	** 读取更改文件内容
+	 * 
+	 * @param {*} param0 
+	 * 下载
+	 */
+	bundledownFile({ request, response }){
+		let pj_id = request.input('id')
+		this.set_bundle_pyth(pj_id);
+
+		let fs			= require("fs");
+		let bdfile      = this.bdfile_path + '/dist/custom-tag/clound_tag.gz'
+		return response.attachment(bdfile)	
+	}
+
+
+
+
+	//设置打包文件路径
+	set_bundle_pyth(pj_id) {
+		const path       = require('path');
+		let bdfile_path  = '../../../../projects/' + pj_id; //打包文件目录
+		bdfile_path      = path.join(__dirname, bdfile_path);
+		this.bdfile_path = bdfile_path
+	}
+
+	/**
+	 * 压缩文件
+	 */
+	bundlefileToZlib(){
+		let bdfile_path  = this.bdfile_path + '/dist/custom-tag/' //打包文件路径
+		const archiver     = require('archiver')
+		const fs 		 = require('fs');
+
+		//需压缩文件列表
+		let zlib_file = ['index.html','custom-items.js'];
+
+		// 创建生成的压缩包路径
+		var output = fs.createWriteStream(bdfile_path + 'clound_tag.gz');
+		var archive = archiver('zip');
+		
+		return new Promise((resolve, reject)=>{
+
+			// 'close' 事件监听
+			output.on('close', function() {
+				console.log('close:' + archive.pointer() + ' total bytes');
+				resolve('end')
+			});
+	
+			// 'end' 事件监听
+			output.on('end', function() {
+				console.log(`======end: 正常压缩完成`);
+				resolve('end')
+			});
+			
+			// 'warnings' 事件监听
+			archive.on('warning', function(err) {
+				console.log(`======warning: ${warning}`);
+			});
+			
+			// 'error' 事件监听
+			archive.on('error', function(err) {
+				console.log(`======error: ${err}`);
+				resolve('end')
+			});
+
+			// pipe 方法
+			archive.pipe(output);
+
+			// 添加流文件
+			zlib_file.map((filename)=>{
+				let filepath = bdfile_path + filename
+				archive.append(fs.createReadStream(filepath), {
+					name: filename
+				});
+			})
+			
+			//执行
+			archive.finalize();
+
+	    })
+	}
+
+	bundlefileToOne(){
+		let bdfile_path  = this.bdfile_path + '/dist/custom-tag/' //打包文件路径
+		console.log(bdfile_path)
+		let timestape 	 = this.get_filename('T');
+		console.log(`\n======合并开始执行时间：${timestape} --\n`);
+		const exec = require('child_process').exec;
+		return new Promise((resolve, reject)=>{
+			let ls = exec('cd '+ bdfile_path + ' && cat runtime.js polyfills.js scripts.js main.js > custom-items.js');
+			
+
+		    ls.stdout.on('data', (data) => {
+		      console.log(`======stdout: ${data}`);
+		    });
+
+			ls.stderr.on('data', (data) => {
+				console.log(`======stderr: ${data}`);
+				resolve('end')
+			});
+	
+			ls.stdout.on('end', () => {
+				timestape = this.get_filename('T')
+				console.log(`\n======合并退出时间点：${timestape} --\n`);
+				resolve('end')
+			});
+		 })
+	}
+
+	//调用系统打包文件
+	bundlefile() {
+		let bdfile_path  = this.bdfile_path //打包文件路径
+		
+		let timestape = this.get_filename('T');
+		console.log(`\n======打包开始执行时间：${timestape} --\n`);
+		const exec = require('child_process').exec;
+		return new Promise((resolve, reject)=>{
+			let ls = exec('cd '+ bdfile_path + ' && npm run build');
+			//const ls = exec('ls ' + bdfile_path);
+
+		    ls.stdout.on('data', (data) => {
+		      console.log(`======stdout: ${data}`);
+		    });
+
+			ls.stderr.on('data', (data) => {
+				console.log(`======stderr: ${data}`);
+				resolve('end')
+			});
+	
+			ls.stdout.on('end', () => {
+				timestape = this.get_filename('T')
+				console.log(`\n======打包退出时间点：${timestape} --\n`);
+				resolve('end')
+			});
+		 })
+	}
+
+
+	/**
+	** 读取更改文件内容 
 	**/
 	changecnt(pj_id) {
 		const path  = require('path');
@@ -61,10 +246,10 @@ class PjbdController {
 		let chang_file 	= ['pjshow.module.ts', 'pjshow-routing.module.ts'];
 		let upfile_path = '../../../../src/app/routes/pjshow/';
 
+
 		for(let i=0; i < chang_file.length; i++) {
 			//拼凑文件路径
 			let filepath = path.join(__dirname, upfile_path + chang_file[i]);
-			console.log(filepath)
 		    //文件内容取得
 			cnt = this.readsimple(filepath);
 			//修改替换
@@ -74,7 +259,7 @@ class PjbdController {
 			
 		}
 		
-		return cnt
+		return true
 	}
 
 	/**
@@ -183,8 +368,40 @@ class PjbdController {
 	}
 
 
-	//操作文件流，检查写入模块中相应语句
+	//格式当前时间为，年月日时分秒
+	get_filename( s = 'F'){
+		var date   = new Date();
+		var year   = date.getFullYear();
+		var month  = date.getMonth()+1;
+		var day    = date.getDate();
+		var hour   = date.getHours();
+		var minute = date.getMinutes();
+		var second = date.getSeconds();
 
+		month      = this.checkTime(month)
+		day        = this.checkTime(day)
+		hour       = this.checkTime(hour)
+		minute     = this.checkTime(minute)
+		second     = this.checkTime(second)
+
+		let backstr = '';
+		if(s == 'T'){
+			backstr = `${year}-${month}-${day} ${hour}:${minute}:${second}`
+		} else {
+			backstr = `${year}${month}${day}${hour}${minute}${second}`;
+		}
+		return backstr
+	}
+
+	//时间补位前导零
+	checkTime(i)
+	{
+		if (i<10)
+		{
+		  i="0" + i
+		}
+		return i
+	}
 }
 
 module.exports = PjbdController

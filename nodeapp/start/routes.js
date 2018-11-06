@@ -28,9 +28,9 @@ Route.resource('pjbds', 'PjbdController')
 // .except(['index'])设置一下不需要的路由 
 
 Route.get('/pjbd', 'PjbdController.render'); 
-Route.get('/showpj', 'PjbdController.showpj'); //读取文件目录
 
-
+//读取显示项目文件目录等信息
+Route.get('/showpj', 'PjbdController.showpj'); 
 
 //创建项目
 Route.get('/pjinit', 'PjmakeController.pjinit'); //创建项目
@@ -38,7 +38,16 @@ Route.get('/pjinit', 'PjmakeController.pjinit'); //创建项目
 //读取操作项目
 Route.get('/showfile', 'PjbdController.showfile');//读取指定文件
 
+
+//文件打包下载
+Route.get('/bundledown', 'PjbdController.bundledown');
+
+//设置预览文件
 Route.get('/setshow', 'PjbdController.setshow');
+
+//下载测试
+Route.get('/bundledownFile', 'PjbdController.bundledownFile');
+
 
 Route.get('/runcommand', 'PjbdController.runcommand');
 
