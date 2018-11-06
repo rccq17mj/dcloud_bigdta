@@ -2,19 +2,22 @@ import { NgModule } from '@angular/core';
 import { AxisLabelComponent } from './axis-label/axis-label.component';
 import {G2Component} from "./g2.component";
 import {NgZorroAntdModule} from "ng-zorro-antd";
+import {CommonModule} from "@angular/common";
 
+
+// 组件
 const COMPONENTS_NOROUNT = [
-  //示例页面
-  G2Component,
-  // 组件
   AxisLabelComponent
 ];
 
 @NgModule({
   imports: [
+    CommonModule,
     NgZorroAntdModule
   ],
-  declarations: [...COMPONENTS_NOROUNT],
-  exports: [...COMPONENTS_NOROUNT]
+  declarations: [G2Component,...COMPONENTS_NOROUNT],
+  exports: [G2Component,...COMPONENTS_NOROUNT]
 })
-export class G2Module { }
+export class G2Module {
+
+}

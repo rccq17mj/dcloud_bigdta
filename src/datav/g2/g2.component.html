@@ -1,16 +1,7 @@
 
   <div nz-row nzGutter="16">
-    <div nz-col class="gutter-row" nzSpan="6">
-      <!--<div class="gutter-box">col-6</div>-->
-      <img style="width: 100%" [src]="image">
-    </div>
-    <div nz-col class="gutter-row" nzSpan="6">
-      <div class="gutter-box">col-6</div>
-    </div>
-    <div nz-col class="gutter-row" nzSpan="6">
-      <div class="gutter-box">col-6</div>
-    </div>
-    <div nz-col class="gutter-row" nzSpan="6">
-      <div class="gutter-box">col-6</div>
+    <div nz-col *ngFor="let item of attr;trackBy: trackByPj" class="gutter-row" nzSpan="6">
+      <img style="width: 100%" [src]="item.image">
+      <span style="width: 100%; display: block; text-align: center;">{{item.title}}</span>
     </div>
   </div>
