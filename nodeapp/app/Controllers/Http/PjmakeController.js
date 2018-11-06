@@ -1,48 +1,93 @@
 'use strict'
-
+const PATH       = require('path');
+const PROCESS    = require('child_process');
+const FS 		 = require('fs');
 class PjmakeController {
 
-	//拷贝
+	constructor() {
+		this.pjfile_path = '';
+	}
+
+	//设置项目文件路径
+	set_pj_pyth(pj_id) {
+		let pjfile_path  	= '../../../../projects/' + pj_id; //打包文件目录
+		this.pjfile_path    = PATH.join(__dirname, pjfile_path);
+	}
+
+	//拷贝初始项目
 	async pjinit({ request }){
 		//路径设置
-		const path  = require('path');
-		let pjsfile  = path.join(__dirname,'../../../../projects/');
+		let ag6ready = PATH.join(__dirname,'../../../../ag6ready');
 
 		var name     = request.input('name');
 		var discript = request.input('discript');
+
 		//生成项目名
 		let filename = this.get_filename()
-		let filepath = this.filesmake(pjsfile,filename)
+		this.set_pj_pyth(filename);
+		let pj_path = this.pjfile_path;
 
 		//copy文件夹
-		const data  = await this.sys_copy(pjsfile + 'ag6ready/*', filepath+"/")  //ag6ready
-
+		await this.sys_copy(ag6ready, pj_path)
+		
 		//标记项目
-		let cnfile  = filepath+"/.CN"
+		let cnfile  = pj_path+"/.CN"
 		let savetag = {'id':filename, 'name':name, 'discript':discript};
 		let codestr = JSON.stringify(savetag)
 		this.writesimple(cnfile,codestr)
 
 		//安装
-		// this.pjinstall(filepath);
+		await this.pjInstallOnline() //
+
 		return savetag;
 	}
 
-	writesimple(filename, codestr) {
-		const fs = require('fs');
-		return fs.writeFileSync(filename, codestr)
+	//进行安装 独立入口
+	async pjinstall({ request }){
+		let pj_id = request.input('id')
+		this.set_pj_pyth(pj_id);
+		await this.pjInstallOnline()
+		return {'status':200}
+	}
+
+	pjInstallOnline () {
+		let timestape 	    = this.get_filename('T');
+		let pjfile_path 	= this.pjfile_path;
+		console.log(`\n======安装开始执行时间：${timestape} --\n`);
+
+		return new Promise((resolve, reject)=>{
+			let ls = PROCESS.exec('cd '+ pjfile_path + ' && npm install');
+
+		    ls.stdout.on('data', (data) => {
+		      console.log(`======安装stdout: ${data}`);
+		    });
+
+			ls.stderr.on('data', (data) => {
+				console.log(`======安装stderr: ${data}`);
+				resolve('end')
+			});
+	
+			ls.stdout.on('end', () => {
+				timestape = this.get_filename('T')
+				console.log(`\n======安装退出时间点：${timestape} --\n`);
+				resolve('end')
+			});
+		 })
 	}
 
 
-	/**
-	** pjsfile  项目所在路径名. ../projects/date
-	** filename 文件名
-	**/
-	filesmake(pjsfile, filename ) {
-		const fs  = require('fs')
-		var filepath  = pjsfile+filename
-		fs.mkdirSync(filepath)
-		return filepath
+
+
+
+
+
+
+
+
+
+
+	writesimple(filename, codestr) {
+		return FS.writeFileSync(filename, codestr)
 	}
 
 	/**
@@ -53,15 +98,15 @@ class PjmakeController {
 	sys_copy(src, dst) {
       src = src.replace(" ",'\\ ');
       dst = dst.replace(" ",'\\ ');
-      const process = require('process');
-    console.log( process.platform === 'win32' ? true : false);
-
 	  let timestape = this.get_filename('T');
-	  console.log(`\n======开始执行时间点：${timestape} --\n`);
-	  const exec = require('child_process').exec;
+	  console.log(`\n======开始执行copy时间点：${timestape} --\n`);
+	  
+	  let cmd = 'cp -r '+ src + ' ' + dst;
+	  console.log(cmd)
 
 	  return new Promise((resolve, reject)=>{
-        let ls = exec('cp -r '+ src + ' ' + dst);
+		
+        let ls = PROCESS.exec(cmd);
 		// const ls = spawn('ls', ['-lh', './']);
 
 		// ls.stdout.on('data', (data) => {
@@ -82,21 +127,13 @@ class PjmakeController {
 
 
 	copy(src, dst) {
-	  const fs  = require('fs')
-	  fs.writeFileSync(dst, fs.readFileSync(src));
+	    FS.writeFileSync(dst, fs.readFileSync(src));
 	}
 
 
 	//更改文件名称
 	changname(){
 
-	}
-
-	//进行安装
-	pjinstall(filepath){
-		const execSync = require('child_process').execSync;
-		let cmd = execSync('cd '+filepath+' && cnpm install');
-		console.log(cmd)
 	}
 
 	//生成项目文件名称：格式为，年月日时分秒

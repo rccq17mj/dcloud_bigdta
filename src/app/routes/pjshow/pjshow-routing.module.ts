@@ -1,4 +1,4 @@
-import { MainPages } from '../../../../projects/ag6ready/src/app/app.component';
+import { MainPages } from '../../../../projects/20181106161102/src/app/app.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { PjshowPrviewComponent } from './prview/prview.component';

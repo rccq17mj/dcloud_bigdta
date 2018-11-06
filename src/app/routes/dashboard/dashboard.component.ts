@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
-import { forEach } from '@angular/router/src/utils/collection';
 import { Project } from '../project';
-
+import { NzNotificationService } from 'ng-zorro-antd';
 
 import {
   FormBuilder,
@@ -22,13 +21,14 @@ export class DashboardComponent implements OnInit {
     id: 1,
     name: '',
     discript: '',
-    bdflag: false
+    installis: true,
+    bdflag: false,
   };
   datas : any;  //项目清单
   isVisible   = false; //弹框可见否
   loadvisible = false; //载入提示可见否
 
-  constructor(private http: _HttpClient) {}
+  constructor(private http: _HttpClient, private notification: NzNotificationService) {}
 
     /**
      * 弹框系列方法
@@ -63,6 +63,7 @@ export class DashboardComponent implements OnInit {
       let url = '/api/pjinit'
       //debugger;
       this.http.get( url, {name: this.pj.name, discript: this.pj.discript}).subscribe( res => {
+
         this.datas.unshift(res);
 
         this.pj.name = ''
@@ -90,6 +91,23 @@ export class DashboardComponent implements OnInit {
     trackByPj(id: number, datas): number {
         return datas.id
     }
+
+    //安装项目
+    pjinstall(pj_id) {
+      let url = '/api/pjinstall'
+      this.http.get( url, {id: pj_id}).subscribe( res => {
+
+        this.notification.blank( '初始化提示', '己完成初始化.');
+
+        this.datas.map((ele)=>{
+          if(ele.id == pj_id) {
+            ele.bdflag = true
+          }
+        })
+        console.log(this.datas)
+      });
+    }
+
 
     //发送指定文件夹的打包请求
     bundledown(pj_id) {
