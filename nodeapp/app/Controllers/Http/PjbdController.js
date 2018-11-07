@@ -30,7 +30,7 @@ class PjbdController {
 
 
 		var filesArr 	= [];
-		
+
 		const path      = require('path');
 
 		let pjsfile     = path.join(__dirname,'../../../../projects/');
@@ -41,7 +41,7 @@ class PjbdController {
 		readDir.map(function(ele){
 			var itempath = pjsfile+""+ele
 			var readfile = itempath+'/.CN'
-			var info = fs.statSync(itempath)	
+			var info = fs.statSync(itempath)
 			if(info.isDirectory() && ele!='ag6ready'){
 				var checkDir = fs.existsSync(readfile);
 				if(checkDir){
@@ -51,7 +51,7 @@ class PjbdController {
 					var readcnt = JSON.parse(readcntstr)
 					//检测压缩文件是否己生成过
 					var zipfile = itempath + '/dist/custom-tag/clound_data.gz'
-					
+
 					if(fs.existsSync(zipfile)) {
 						readcnt['bdflag'] = true
 					}else{
@@ -59,7 +59,7 @@ class PjbdController {
 					}
 					filesArr.push(readcnt);
 				}
-				
+
 			}
 		})
 
@@ -81,7 +81,7 @@ class PjbdController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param {*} 项目id 即目录
 	 * function 1.打包 2.文件合并cat js>>  3文件压缩
 	 */
@@ -108,8 +108,8 @@ class PjbdController {
 	}
 
 	/**
-	 * 
-	 * @param {*} param0 
+	 *
+	 * @param {*} param0
 	 * 下载
 	 */
 	bundledownFile({ request, response }){
@@ -117,8 +117,8 @@ class PjbdController {
 		this.set_bundle_pyth(pj_id);
 		let fs			= require("fs");
 		let bdfile      = this.bdfile_path + '/dist/custom-tag/clound_data.gz'
-		return response.attachment(bdfile)	
-		
+		return response.attachment(bdfile)
+
 	}
 
 
@@ -132,7 +132,7 @@ class PjbdController {
 		let bdfile_path  = this.bdfile_path + '/dist/custom-tag/' //打包文件路径
 		const archiver   = require('archiver')
 		const fs 		 = require('fs');
-		
+
 		//需压缩文件列表
 		let files = ['index.html','main.js','polyfills.js','runtime.js','scripts.js','styles.js', 'vendor.js', '3rdpartylicenses.txt','favicon.ico'];
 		//let files =fs.readdirSync(bdfile_path);
@@ -141,7 +141,7 @@ class PjbdController {
 		// 创建生成的压缩包路径
 		var output = fs.createWriteStream(bdfile_path + 'clound_data.gz');
 		var archive = archiver('zip');
-		
+
 		return new Promise((resolve, reject)=>{
 
 			// 'close' 事件监听
@@ -149,18 +149,18 @@ class PjbdController {
 				console.log('close:' + archive.pointer() + ' total bytes');
 				resolve('end')
 			});
-	
+
 			// 'end' 事件监听
 			output.on('end', function() {
 				console.log(`======end: 正常压缩完成`);
 				resolve('end')
 			});
-			
+
 			// 'warnings' 事件监听
 			archive.on('warning', function(err) {
 				console.log(`======warning: ${warning}`);
 			});
-			
+
 			// 'error' 事件监听
 			archive.on('error', function(err) {
 				console.log(`======error: ${err}`);
@@ -178,7 +178,7 @@ class PjbdController {
 				});
 			})
 			// archive.directory(bdfile_path)
-			
+
 			//执行
 			archive.finalize();
 
@@ -193,7 +193,7 @@ class PjbdController {
 		const exec = require('child_process').exec;
 		return new Promise((resolve, reject)=>{
 			let ls = exec('cd '+ bdfile_path + ' && cat runtime.js polyfills.js scripts.js main.js > custom-items.js');
-			
+
 
 		    ls.stdout.on('data', (data) => {
 		      console.log(`======stdout: ${data}`);
@@ -203,7 +203,7 @@ class PjbdController {
 				console.log(`======stderr: ${data}`);
 				resolve('end')
 			});
-	
+
 			ls.stdout.on('end', () => {
 				timestape = this.get_filename('T')
 				console.log(`\n======合并退出时间点：${timestape} --\n`);
@@ -215,7 +215,9 @@ class PjbdController {
 	//调用系统打包文件
 	bundlefile() {
 		let bdfile_path  = this.bdfile_path //打包文件路径
-		
+    bdfile_path = bdfile_path.replace(" ",'\\ ');
+
+
 		let timestape = this.get_filename('T');
 		console.log(`\n======打包开始执行时间：${timestape} --\n`);
 		const exec = require('child_process').exec;
@@ -231,7 +233,7 @@ class PjbdController {
 				console.log(`======stderr: ${data}`);
 				resolve('end')
 			});
-	
+
 			ls.stdout.on('end', () => {
 				timestape = this.get_filename('T')
 				console.log(`\n======打包退出时间点：${timestape} --\n`);
@@ -242,7 +244,7 @@ class PjbdController {
 
 
 	/**
-	** 读取更改文件内容 
+	** 读取更改文件内容
 	**/
 	changecnt(pj_id) {
 		const path  = require('path');
@@ -263,19 +265,19 @@ class PjbdController {
 			if(cnt.toString().indexOf("ag6ready") == -1) {
 				cnt = cnt.toString().replace(/(\d{14})/, pj_id)
 			} else {
-				cnt = cnt.toString().replace(/(ag6ready)/, rpstr) 
+				cnt = cnt.toString().replace(/(ag6ready)/, rpstr)
 			}
 
 			//重写回去
 			this.writesimple(filepath, cnt)
-			
+
 		}
-		
+
 		return true
 	}
 
 	/**
-	 * 
+	 *
 	 * @param startPath  起始目录文件夹路径
 	 * @returns {Array}
 	 */
@@ -321,7 +323,7 @@ class PjbdController {
 		return fs.readFileSync(filename)
 	}
 
-	
+
 	writesimple($filename, codestr) {
 		const fs = require('fs');
 		fs.writeFileSync($filename, codestr)
