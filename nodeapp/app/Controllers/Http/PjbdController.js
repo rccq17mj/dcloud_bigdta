@@ -260,13 +260,13 @@ class PjbdController {
 		    //文件内容取得
 			cnt = this.readsimple(filepath);
 			//修改替换
-			let rpstr = 'projects/' + pj_id
-
-			if(cnt.toString().indexOf("ag6ready") == -1) {
-				cnt = cnt.toString().replace(/(\d{14})/, pj_id)
-			} else {
-				cnt = cnt.toString().replace(/(ag6ready)/, rpstr)
-			}
+			//let rpstr = 'projects/' + pj_id
+			cnt = cnt.toString().replace(/(ag6ready|\d{14})/, pj_id)
+			// if(cnt.toString().indexOf("ag6ready") == -1) {
+			// 	cnt = cnt.toString().replace(/(\d{14})/, pj_id)
+			// } else {
+			// 	cnt = cnt.toString().replace(/(ag6ready)/, rpstr)
+			// }
 
 			//重写回去
 			this.writesimple(filepath, cnt)
