@@ -19,6 +19,9 @@
 
 const { Ignitor } = require('@adonisjs/ignitor')
 
+require('child_process').exec('cp -f bakfile/{pjshow.module.ts,pjshow-routing.module.ts} ../src/app/routes/pjshow/');
+
+
 new Ignitor(require('@adonisjs/fold'))
   .appRoot(__dirname)
   .fireHttpServer()
