@@ -17,7 +17,7 @@ class PjmakeController {
 	//拷贝初始项目
 	async pjinit({ request }){
 		//路径设置
-		let ag6ready = PATH.join(__dirname,'../../../../projects/ag6ready');
+		let ag6ready = PATH.join(__dirname,'../../../../templates/ag6ready');
 
 		var name     = request.input('name');
 		var discript = request.input('discript');
