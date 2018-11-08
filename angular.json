@@ -31,7 +31,10 @@
               "src/styles.less"
             ],
             "scripts": [
-              "node_modules/ajv/dist/ajv.bundle.js"
+              {
+                "input": "node_modules/ajv/dist/ajv.bundle.js"
+              },
+              "src/lib/dataVconfig.js"
             ]
           },
           "configurations": {
