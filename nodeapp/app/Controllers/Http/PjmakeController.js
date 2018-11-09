@@ -11,7 +11,12 @@ class PjmakeController {
 	//设置项目文件路径
 	set_pj_pyth(pj_id) {
 		let pjfile_path  	= '../../../../projects/' + pj_id; //打包文件目录
+		
 		this.pjfile_path    = PATH.join(__dirname, pjfile_path);
+
+		if(!FS.existsSync(this.pjfile_path)) {
+			FS.mkdirSync(this.pjfile_path)
+		}
 	}
 
 	//拷贝初始项目
@@ -26,9 +31,11 @@ class PjmakeController {
 		let filename = this.get_filename()
 		this.set_pj_pyth(filename);
 		let pj_path = this.pjfile_path;
+		
+		
 
 		//copy文件夹
-		await this.sys_copy(ag6ready, pj_path)
+		await this.sys_copy(ag6ready+'/.', pj_path)
 
 		//标记项目
 		let cnfile  = pj_path+"/.CN"
@@ -58,7 +65,7 @@ class PjmakeController {
 		console.log(`\n======安装开始执行时间：${timestape} --\n`);
 
 		return new Promise((resolve, reject)=>{
-			let ls = PROCESS.exec('cd '+ pjfile_path + ' && npm install');
+			let ls = PROCESS.exec('cd '+ pjfile_path + ' && cnpm install');
 
 		    ls.stdout.on('data', (data) => {
 		      console.log(`======安装stdout: ${data}`);
@@ -103,7 +110,7 @@ class PjmakeController {
 	  let timestape = this.get_filename('T');
 	  console.log(`\n======开始执行copy时间点：${timestape} --\n`);
 
-	  let cmd = 'cp -r '+ src + ' ' + dst;
+	  let cmd = 'cp -R '+ src + ' ' + dst;
 	  console.log(cmd)
 
 	  return new Promise((resolve, reject)=>{
