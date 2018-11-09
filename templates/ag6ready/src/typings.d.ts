@@ -1,1 +1,1 @@
-declare var dogLog:any;
+declare var dataVconfig:any;
