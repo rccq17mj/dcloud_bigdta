@@ -7,6 +7,7 @@ import { Component,Output, EventEmitter, OnInit } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class MainPages implements OnInit{
+  dataConfig: any;
 
   @Output() itemAdded:EventEmitter<string> = new EventEmitter<string>();
   addItem(item:string){
@@ -16,9 +17,14 @@ export class MainPages implements OnInit{
     this.itemAdded.emit(item);
   }
 
-  ngOnInit() {
-
+  constructor() {
+    // 将json配置js中的组件配置传递给组件
+    this.dataConfig = dataVconfig.components()["app-axis-label"];
   }
+
+  ngOnInit() {}
+
+  dataRendered(dataConfig: object) {}
 
   items:string[] =[];
 }
